@@ -1,5 +1,5 @@
 Purpose: This toolbox takes the input of *.p2d files of grid points identified in InsightV3V and generates the calibration file *.V3VCalib.
-This code is needed where InsightV3V is unable to find the grid and calibrate (e.g., for steep camera angles relative to the grid). The code is only written for a four-camera system and for the TSI backlit target.
+This code is needed where InsightV3V is unable to find the grid and calibrate (e.g., for steep camera angles relative to the grid). 
 
 Instructions:
 - Before using this script, you must first: (1) capture calibration images; (2) pre-process the images as needed; (3) process the images in InsightV3V with the first step in calibration processing (i.e., to find 2D points)
@@ -12,3 +12,4 @@ Instructions:
 
 Notes: 
 - This code has only been tested with InsightV3V-4G version 4.0.3.0.
+- This code is only written for a four-camera system and for the TSI backlit target.
