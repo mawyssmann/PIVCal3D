@@ -1,7 +1,7 @@
 Author: Micah A. Wyssmann
 Date:   6/27/2021
 
-Purpose of PIVCal3D: This code takes inputs of identified grid points and determines the 'world' grid locations. This information can then be used to generate calibration polynomials mapping from camera to world coordinates (and vice versa).
+Purpose of PIVCal3D: This code takes inputs of identified grid points and determines the 'world' grid locations. This information can then be used to generate calibration polynomials mapping from camera to world coordinates (and vice versa) for a volumetric particle image velocimetry (PIV) system.
 
 Software compatability:
 - Inputs of grid points are taken from the files generated in the TSI InsightV3V(TM) 4G software
