@@ -6,21 +6,18 @@
 % successively and evaluate the results as needed.
 
 % STEPS FOR CALIBRATION CONTAINED HEREIN
-% 1) Open directory and select *.p2d files in the Insight-V3V directory
+% 1) Open directory and select *.p2d files in the InsightV3V(TM) directory
 % 2) Manually click control points around fiducial mark in images 1 & 2
 %   (and confirm quality)
 % 3) Run function that projects control points to other images (and confirm
 %   quality) 
 % 4) Call the function that finds all grid points and assigns their
 % locations
-% 5) Run calibration regression to get equations and evaluate calibration
-%   quality (based on camera-to-world and world-to-camera error plot)
-% 6) Export files and key figures
 
 % GENERAL NOTES
 % - To run a section, place your cursor in the section so that it lights 
 % up yellow, then click "Run Section" button in Matlab editor tab
-% - Steps 4 and 6 require some manual inputs, which are listed at the
+% - Step 4 requires some manual inputs, which are listed at the
 % top of the code section. Change these variables to desired values before 
 % running the section.
 
@@ -107,53 +104,3 @@ if Plot == 1
 end
 
 disp('FINISHED STEP 4: Find grid points and plot. Make sure it looks right!');
-
-%% Step 5: Run calibration regression to get equations and evaluate
-
-CalEqns = FitCalEqns_ALL(V3Vgrid);
-CalEval = CalEvalCalc(V3Vgrid,CalEqns);
-CalEvalPlot(CalEval,1,[]);
-
-disp('FINISHED STEP 5: Run calibration and generate eval plot. Make sure it looks right!')
-
-%% Step 6: Export files and key figures (when you're satisfied with the results!)
-
-% ---------- Variables to change ------------------
-basefolder = 'C:\Users\Micah\Documents';    % directory for saving results
-CalibrationName = 'Cal1a';                  % calibration name
-ExportFigs = 0;                             % Export figures to directory?
-                                                % 0=no; 1 = yes
-% -------------------------------------------------
-
-fullpath = [basefolder '\V3V Matlab Calibrations\' V3Vgrid.expname '\' CalibrationName];
-
-% create folders
-if ~exist(fullpath, 'dir'); mkdir(fullpath); end
-if ~exist([fullpath '\Figs'], 'dir'); mkdir([fullpath '\Figs']); end
-
-% Compile info calibration info for *.V3VCalib file
-V3VCalib = V3VCalib_Compile(V3Vgrid,CalEqns,CalEval);
-
-% export data structures from Matlab
-strucname = [fullpath '\' CalibrationName '_strucs.mat'];
-save(strucname,'V3Vgrid','CalEqns','CalEval','V3VCalib');
-
-% export *.V3VCalib file
-V3VCalib_export(V3VCalib,[fullpath '\' CalibrationName]); % to documents
-idxs = strfind(V3Vgrid.datapath,'\'); expfolder = V3Vgrid.datapath(1:(idxs(end-2)));
-V3VCalib_export(V3VCalib,[expfolder 'Settings\' CalibrationName]); % to V3V folder
-
-% export key figures
-if ExportFigs == 1
-    close all;
-    for Img = 1:numel(V3Vgrid.camL)
-        PlotGrid(V3Vgrid,[],Img,plotver,0);
-        figname = ['plane at z = ' num2str(V3Vgrid.camL(Img).z_mm) ' mm'];
-        saveas([fullpath '\Figs\' figname '.png'],'-transparent')
-    end
-end
-
-CalEvalPlot(CalEval,1,[]);
-export_fig([fullpath '\Figs\' 'CalEval.png'],'-transparent')
-
-disp('FINISHED STEP 6: Export files and figures')
